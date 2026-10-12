@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  schedule:
+    # Runs automatically every 5 hours
+    - cron: '0 */5 * * *'
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: ci-pipeline
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run
+        env:
+          CORE_KEY: ${{ secrets.CORE_KEY }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          FOLLOW_DELAY: '10'
+          BATCH_LIMIT: '0'
+          DAILY_LIMIT: '0'
+          MAX_RUN_TIME: '17700'
+          SYNC_BUFFER: '300'
+        run: |
+          python main.py
