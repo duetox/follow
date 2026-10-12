@@ -1,2 +1,1 @@
-# follow
-follow me
+# follow me
