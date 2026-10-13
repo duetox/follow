@@ -44,5 +44,9 @@ jobs:
           DAILY_LIMIT: '0'
           MAX_RUN_TIME: '17700'
           SYNC_BUFFER: '300'
+          AUTO_UNFOLLOW: 'true'
+          UNFOLLOW_GRACE_HOURS: '24'
+          UNFOLLOW_DELAY: '2'
+          UNFOLLOW_BATCH_LIMIT: '50'
         run: |
           python main.py
